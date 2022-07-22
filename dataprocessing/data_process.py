@@ -16,10 +16,12 @@ def data_to_tfrecord(imagepath, outputpath):
     path = imagepath
     for folder in os.listdir(path):
         for image in tqdm(os.listdir(path+folder), desc=folder+" 폴더 작업중"):
-            if '.370' in folder:
+            if '.csv' in image: #landmark point
+                continue
+            if '.0' in folder:
                 images.append({'path': path+folder+"/"+image, 'class': 0})
                 label_list.append(0)
-            elif '.817' in folder:
+            elif '.1' in folder:
                 images.append({'path': path+folder+"/"+image, 'class': 1})
                 label_list.append(1)
     # print('num_classes: ', len(set(label_list)))
