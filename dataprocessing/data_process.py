@@ -1,5 +1,6 @@
 import sys
 import numpy as np
+import pandas as pd
 import os
 import PIL
 import PIL.Image
@@ -15,13 +16,17 @@ def data_to_tfrecord(imagepath, outputpath):
     images, label_list = [], []
     path = imagepath
     for folder in os.listdir(path):
-        for image in tqdm(os.listdir(path+folder), desc=folder+" 폴더 작업중"):
-            if '.csv' in image: #landmark point
-                continue
+        for image in tqdm(os.listdir(path+folder), desc=folder+" 폴더 작업중"):            
             if '.0' in folder:
+                if '.csv' in image: #landmark point
+                    landmark_df = pd.read_csv(image)
+                    landmark_columns = [point for point in landmark_df.columns if "-" in point]
+                    landmark_df[landmark_columns].to_numpy()
                 images.append({'path': path+folder+"/"+image, 'class': 0})
                 label_list.append(0)
             elif '.1' in folder:
+                if '.csv' in image: #landmark point
+                    continue
                 images.append({'path': path+folder+"/"+image, 'class': 1})
                 label_list.append(1)
     # print('num_classes: ', len(set(label_list)))
