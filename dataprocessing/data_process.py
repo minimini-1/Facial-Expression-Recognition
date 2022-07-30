@@ -16,19 +16,23 @@ def data_to_tfrecord(imagepath, outputpath):
     images, label_list = [], []
     path = imagepath
     for folder in os.listdir(path):
-        for image in tqdm(os.listdir(path+folder), desc=folder+" 폴더 작업중"):            
-            if '.0' in folder:
+        i = 0       
+        landmark_df = pd.read_csv(path+folder+"/"+folder.split("+")[0]+".csv")
+        landmark_columns = [point for point in landmark_df.columns if "-" in point] 
+        for image in tqdm(os.listdir(path+folder), desc=folder+" 폴더 작업중"):     
+            if '+0' in folder:
                 if '.csv' in image: #landmark point
-                    landmark_df = pd.read_csv(image)
-                    landmark_columns = [point for point in landmark_df.columns if "-" in point]
-                    landmark_df[landmark_columns].to_numpy()
-                images.append({'path': path+folder+"/"+image, 'class': 0})
+                    continue            
+                images.append({'path': path+folder+"/"+image, 'class': 0, 'landmark_points': landmark_df[landmark_df['frame'] == float(image.replace(".jpg", ""))][landmark_columns].to_numpy()[0]})
                 label_list.append(0)
-            elif '.1' in folder:
+            elif '+1' in folder:
                 if '.csv' in image: #landmark point
+                    # landmark_df = pd.read_csv(image)
+                    # landmark_columns = [point for point in landmark_df.columns if "-" in point]
                     continue
-                images.append({'path': path+folder+"/"+image, 'class': 1})
+                images.append({'path': path+folder+"/"+image, 'class': 1, 'landmark_points': landmark_df[landmark_df['frame'] == float(image.replace(".jpg", ""))][landmark_columns].to_numpy()[0]})
                 label_list.append(1)
+            i += 1
     # print('num_classes: ', len(set(label_list)))
     # encoder = class_one_hot_encoder(label_list)
 
@@ -40,6 +44,7 @@ def data_to_tfrecord(imagepath, outputpath):
         for image in tqdm(images, desc='이미지를 tfrecord에 저장중'):
 
             image_class = image['class']
+            image_landmark = image['landmark_points']
             # image_class = image_class.astype('int64')
 
             try:
@@ -73,8 +78,8 @@ def data_to_tfrecord(imagepath, outputpath):
                         feature={
                             'image': tf.train.Feature(bytes_list=tf.train.BytesList(value=[image_file])),
                             'class': tf.train.Feature(int64_list=tf.train.Int64List(value=[image_class])),
+                            'landmark_points': tf.train.Feature(float_list=tf.train.FloatList(value=image_landmark))
                             # 'bb_box': tf.train.Feature(float_list=tf.train.FloatList(value=bb_box_list)),
-                            # 'landmark': tf.train.Feature(float_list=tf.train.FloatList(value=landmark_list))
                         }
                     )
                 )
