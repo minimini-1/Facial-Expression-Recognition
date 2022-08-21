@@ -5,7 +5,7 @@ import os
 import PIL
 import PIL.Image
 import tensorflow as tf
-import tensorflow_datasets as tfds
+# import tensorflow_datasets as tfds
 import IPython.display as display
 from tqdm import tqdm
 import random
