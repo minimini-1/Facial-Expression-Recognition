@@ -32,9 +32,9 @@ def data_to_tfrecord(imagepath, outputpath, mode):
             y1 = temp['bottom'] - temp['top']
             for col in landmark_columns:
                 if 'x' in col:
-                    landmark_points.append(float(temp[col]) / float(x1))
+                    landmark_points.append((float(temp[col]) - float(temp['left'])) / float(x1))
                 elif 'y' in col:
-                    landmark_points.append(float(temp[col]) / float(y1))            
+                    landmark_points.append((float(temp[col]) - float(temp['top'])) / float(y1))            
             # print(landmark_points)
             images.append({'path': path+folder+"/"+image, 'class': int(folder.split('+')[1]), 'landmark_points': landmark_points})
             landmark_points = []
