@@ -19,33 +19,26 @@ def data_to_tfrecord(imagepath, outputpath, mode):
     for folder in os.listdir(path):
         i = 0       
         landmark_df = pd.read_csv(glob.glob(path+folder+"/*.csv")[0])        
-        landmark_columns = [point for point in landmark_df.columns if "-" in point] 
+        landmark_columns = [point for point in landmark_df.columns if "-" in point]
+        landmark_points = []
         for image in tqdm(os.listdir(path+folder), desc=folder+" 폴더 작업중"):     
             # if '+0' in folder:
             if '.csv' in image: #landmark point
                 continue 
             if np.nan in landmark_df[landmark_df['frame'] == float(image.replace(".jpg", ""))]:
                 continue
-            images.append({'path': path+folder+"/"+image, 'class': int(folder.split('+')[1]), 'landmark_points': landmark_df[landmark_df['frame'] == float(image.replace(".jpg", ""))][landmark_columns].to_numpy()[0]})
-            # elif '+5' in folder:
-            #     if '.csv' in image: #landmark point                    
-            #         continue
-            #     if np.nan in landmark_df[landmark_df['frame'] == float(image.replace(".jpg", ""))]:
-            #         continue
-            #     images.append({'path': path+folder+"/"+image, 'class': 0.5, 'landmark_points': landmark_df[landmark_df['frame'] == float(image.replace(".jpg", ""))][landmark_columns].to_numpy()[0]})
-            #     label_list.append(0.5)
-            # elif '+1' in folder:
-            #     if '.csv' in image: #landmark point
-            #         # landmark_df = pd.read_csv(image)
-            #         # landmark_columns = [point for point in landmark_df.columns if "-" in point]
-            #         continue
-            #     if np.nan in landmark_df[landmark_df['frame'] == float(image.replace(".jpg", ""))]:
-            #         continue
-            #     images.append({'path': path+folder+"/"+image, 'class': 1, 'landmark_points': landmark_df[landmark_df['frame'] == float(image.replace(".jpg", ""))][landmark_columns].to_numpy()[0]})
-            #     label_list.append(1)
-            i += 1
-    # print('num_classes: ', len(set(label_list)))
-    # encoder = class_one_hot_encoder(label_list)
+            temp = landmark_df[landmark_df['frame'] == float(image.replace(".jpg", ""))]
+            x1 = temp['right'] - temp['left']
+            y1 = temp['bottom'] - temp['top']
+            for col in landmark_columns:
+                if 'x' in col:
+                    landmark_points.append(float(temp[col]) / float(x1))
+                elif 'y' in col:
+                    landmark_points.append(float(temp[col]) / float(y1))            
+            # print(landmark_points)
+            images.append({'path': path+folder+"/"+image, 'class': int(folder.split('+')[1]), 'landmark_points': landmark_points})
+            landmark_points = []
+            i += 1    
 
     # write tfrecord
     save_path = outputpath
