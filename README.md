@@ -27,7 +27,6 @@
 └─modeling
     │  importance_landmark.csv
     │  model.png
-    │  
     │      
     ├─using_image
     │      cnnmodel.ipynb: CNN으로 이미지만을 통해 분류 진행한 코드  
