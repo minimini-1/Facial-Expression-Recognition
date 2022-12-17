@@ -46,3 +46,22 @@
             dist_change_regression.ipynb: 거리 쌍의 변화 기반 머신러닝(RF, XGBoost) 회귀 모델 코드
             point_change.ipynb: 동일 좌표 이동거리 기반 머신러닝(RF, XGBoost) 모델 코드
 ```
+
+# 데이터 설명
+```
+📦data
+ ┣ 📂image_analysis: Rule 기반 접근법에 사용한 데이터 (다양한 사람들의 4가지 감정 표정)
+ ┣ 📂image_mobilenet: 딥러닝 접근법에 사용한 데이터 (7가지 표정)
+ ┣ 📂images: 머신 러닝 접근법에 사용한 원본 데이터 (6가지 표정)
+ ┣ 📂images2: 딥러닝 접근법에 사용한 원본 데이터
+ ┣ 📜face_data.tfrecord: 딥러닝 접근법에 사용한 데이터 (이미지)
+ ┣ 📜face_data2.tfrecord
+ ┣ 📜face_data3.tfrecord
+ ┣ 📜face_data4.tfrecord
+ ┣ 📜face_data5.tfrecord
+ ┣ 📜face_data6.tfrecord
+ ┣ 📜face_data7.tfrecord
+ ┣ 📜face_data_multi.tfrecord: 딥러닝 접근법에 사용한 데이터 (이미지, 좌표 포함)
+ ┣ 📜face_data_regress.tfrecord
+ ┗ 📜merge.tfrecord
+```
