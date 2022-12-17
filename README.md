@@ -34,7 +34,6 @@
     │      moblienetV2.ipynb: moblienetV2로 이미지만을 통해 분류 진행한 코드 
     │      
     ├─using_image_multi
-    │      moblienetV2_landmark.ipynb: moblienetV2로 이미지와 좌표를 넣어서 학습 후 예측하는 코드
     │      moblienetV2_landmark_multi.ipynb: moblienetV2로 이미지와 좌표를 넣어서 학습 후 예측하는 코드
     │      moblienetV2_landmark_cam.ipynb: moblienetV2로 이미지와 좌표를 넣어서 학습 후 cam구조를 통해 시각화하는 코드
     │      moblienetV2_landmark_regress.ipynb
